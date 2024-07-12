@@ -14,6 +14,11 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsViewHolder> {
 
     private List<Sport> sportList;
+    public ItemClickListener clickListener;
+
+    public void setClickListener(ItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     public CustomAdapter(List<Sport> sportList) {
         this.sportList = sportList;
@@ -29,8 +34,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
     @Override
     public void onBindViewHolder(@NonNull SportsViewHolder holder, int position) {
         Sport sport = sportList.get(position);
-        holder.imageView.setImageResource(sport.image);
-        holder.textView.setText(sport.titleText);
+
+        holder.imageView.setImageResource(sport.getImage());
+        holder.textView.setText(sport.getTitleText());
 
     }
 
@@ -39,7 +45,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
         return sportList.size();
     }
 
-    public static class SportsViewHolder extends RecyclerView.ViewHolder {
+    public  class SportsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
       ImageView imageView;
       TextView textView;
 
@@ -48,6 +54,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
 
             imageView = itemView.findViewById(R.id.imageView);
             textView = itemView.findViewById(R.id.titleTextView);
+            itemView.setOnClickListener(this);
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null) {
+                clickListener.onClick(getAdapterPosition(),v);
+            }
+
         }
     }
 }
